@@ -29,4 +29,3 @@ public class Player
         Debug.Log(this.name + " -> HP: " + this.hp);
     }
 }
-

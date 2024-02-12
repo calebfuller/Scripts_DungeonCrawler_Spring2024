@@ -20,7 +20,7 @@ public class Player1Controller : MonoBehaviour
 
    private void FixedUpdate()
    {
-	   if (Vector3.Distance(this.gameObject.transform.position != this.destinationGO.transform.position) > 1.0f)
+	   /*if (Vector3.Distance(this.gameObject.transform.position != this.destinationGO.transform.position) > 1.0f)
 	   {
 	   this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, 
 												this.destinationGO.transform.position, 
