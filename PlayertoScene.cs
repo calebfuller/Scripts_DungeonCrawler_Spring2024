@@ -9,6 +9,7 @@ public class PlayertoScene : MonoBehaviour
     public GameObject southExit;
     public GameObject eastExit;
     public GameObject westExit;
+    public GameObject middleOfTheRoom;
     private float speed = 5.0f;
     private bool amMoving = false;
     private bool amAtMiddleOfRoom = false;
@@ -22,48 +23,113 @@ public class PlayertoScene : MonoBehaviour
 
     }
 
-    private void turnOnExits()
+    private void turnOnExits(int numberOfExits)
     {
-        this.northExit.gameObject.SetActive(true);
-        this.southExit.gameObject.SetActive(true);
-        this.eastExit.gameObject.SetActive(true);
-        this.westExit.gameObject.SetActive(true);
+        this.turnOffExits();
+        List<GameObject> availableExits = new List<GameObject>();
+        if(numberOfExits >= 1)
+        {
+            availableExits.Add(this.northExit);
+        }
+        if(numberOfExits >= 2)
+        {
+            availableExits.Add(this.southExit);
+        }
+        if(numberOfExits >= 3)
+        {
+            availableExits.Add(this.eastExit);
+        }
+        if(numberOfExits >= 4)
+        {
+            availableExits.Add(this.westExit);
+        }
+
+        foreach(var exit in availableExits)
+        {
+            exit.SetActive(true);
+        }
     }
 
     void Start()
     {
+        Rigidbody rb = this.gameObject.GetComponent<Rigidbody>();
+
         this.turnOffExits();
+
+        this.middleOfTheRoom.SetActive(false);
+        
+        int numberOfExits = Random.Range(1, 5);
+        this.turnOnExits(numberOfExits);
+
         if (!MySingleton.currentDirection.Equals("?"))
         {
-            if(MySingleton.currentDirection.Equals("north"))
+            this.amMoving = true;
+
+            this.middleOfTheRoom.SetActive(true);
+            this.amAtMiddleOfRoom = false;
+
+            if (MySingleton.currentDirection.Equals("north"))
             {
                 this.gameObject.transform.position = this.southExit.transform.position;
+                this.gameObject.transform.LookAt(this.northExit.transform.position);
             }
             else if (MySingleton.currentDirection.Equals("south"))
             {
                 this.gameObject.transform.position = this.northExit.transform.position;
+                this.gameObject.transform.LookAt(this.southExit.transform.position);
             }
             else if (MySingleton.currentDirection.Equals("west"))
             {
                 this.gameObject.transform.position = this.eastExit.transform.position;
+                this.gameObject.transform.LookAt(this.westExit.transform.position);
             }
             else if (MySingleton.currentDirection.Equals("east"))
             {
                 this.gameObject.transform.position = this.westExit.transform.position;
+                this.gameObject.transform.LookAt(this.eastExit.transform.position);
             }
+        }
+        else
+        {
+            this.amMoving = false;
+            this.amAtMiddleOfRoom = true;
+            this.middleOfTheRoom.SetActive(false);
+            this.gameObject.transform.position = this.middleOfTheRoom.transform.position;
         }
     }
 
+    /*
+    IEnumerator turnOnMiddle()
+    {
+        yield return new WaitForSeconds(1);
+        this.middleOfTheRoom.SetActive(true);
+        print("turned on");
+
+    }
+    */
+
     private void OnTriggerEnter(Collider other)
     {
+        print(other.tag);
         if(other.CompareTag("door"))
         {
+            print("Loading scene");
+
             EditorSceneManager.LoadScene("DungeonRoom");
         }
         else if(other.CompareTag("middleOfTheRoom") && !MySingleton.currentDirection.Equals("?"))
         {
-            print("at middle of Room");
+            this.middleOfTheRoom.SetActive(false);
+            this.turnOnExits();
+
+            print("middle");
             this.amAtMiddleOfRoom = true;
+            this.amMoving = false;
+            MySingleton.currentDirection = "middle";
+        }
+        else
+        {
+            print("spomethilskdfjskldjfsdjkl");
         }
     }
 
@@ -102,26 +168,24 @@ public class PlayertoScene : MonoBehaviour
 
         }
 
-        if (amMoving && !amAtMiddleOfRoom)
+        if (MySingleton.currentDirection.Equals("north"))
         {
-            Vector3 targetPosition = Vector3.zero;
-            if (MySingleton.currentDirection.Equals("north"))
-            {
-                targetPosition = northExit.transform.position;
-            }
-            else if (MySingleton.currentDirection.Equals("south"))
-            {
-                targetPosition = southExit.transform.position;
-            }
-            else if (MySingleton.currentDirection.Equals("west"))
-            {
-                targetPosition = westExit.transform.position;
-            }
-            else if (MySingleton.currentDirection.Equals("east"))
-            {
-                targetPosition = eastExit.transform.position;
-            }
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+            this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, this.northExit.transform.position, this.speed * Time.deltaTime);
+        }
+
+        if (MySingleton.currentDirection.Equals("south"))
+        {
+            this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, this.southExit.transform.position, this.speed * Time.deltaTime);
+        }
+
+        if (MySingleton.currentDirection.Equals("west"))
+        {
+            this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, this.westExit.transform.position, this.speed * Time.deltaTime);
+        }
+
+        if (MySingleton.currentDirection.Equals("east"))
+        {
+            this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, this.eastExit.transform.position, this.speed * Time.deltaTime);
         }
     }
 }
