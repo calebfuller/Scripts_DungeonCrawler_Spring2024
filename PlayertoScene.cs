@@ -25,29 +25,10 @@ public class PlayertoScene : MonoBehaviour
 
     private void turnOnExits(int numberOfExits)
     {
-        this.turnOffExits();
-        List<GameObject> availableExits = new List<GameObject>();
-        if(numberOfExits >= 1)
-        {
-            availableExits.Add(this.northExit);
-        }
-        if(numberOfExits >= 2)
-        {
-            availableExits.Add(this.southExit);
-        }
-        if(numberOfExits >= 3)
-        {
-            availableExits.Add(this.eastExit);
-        }
-        if(numberOfExits >= 4)
-        {
-            availableExits.Add(this.westExit);
-        }
-
-        foreach(var exit in availableExits)
-        {
-            exit.SetActive(true);
-        }
+        this.northExit.gameObject.SetActive(true);
+        this.southExit.gameObject.SetActive(true);
+        this.eastExit.gameObject.SetActive(true);
+        this.westExit.gameObject.SetActive(true);
     }
 
     void Start()
@@ -135,7 +116,7 @@ public class PlayertoScene : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.UpArrow) && !this.amMoving)
+        if (Input.GetKeyUp(KeyCode.UpArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("north"))
         {
             this.amMoving = true;
             this.turnOnExits();
@@ -143,7 +124,7 @@ public class PlayertoScene : MonoBehaviour
             this.gameObject.transform.LookAt(this.northExit.transform.position);
         }
 
-        if (Input.GetKeyUp(KeyCode.DownArrow) && !this.amMoving)
+        if (Input.GetKeyUp(KeyCode.DownArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("south"))
         {
             this.amMoving = true;
             this.turnOnExits();
@@ -151,7 +132,7 @@ public class PlayertoScene : MonoBehaviour
             this.gameObject.transform.LookAt(this.southExit.transform.position);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftArrow) && !this.amMoving)
+        if (Input.GetKeyUp(KeyCode.LeftArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("west"))
         {
             this.amMoving = true;
             this.turnOnExits();
@@ -159,7 +140,7 @@ public class PlayertoScene : MonoBehaviour
             this.gameObject.transform.LookAt(this.westExit.transform.position);
         }
 
-        if (Input.GetKeyUp(KeyCode.RightArrow) && !this.amMoving)
+        if (Input.GetKeyUp(KeyCode.RightArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("east"))
         {
             this.amMoving = true;
             this.turnOnExits();
