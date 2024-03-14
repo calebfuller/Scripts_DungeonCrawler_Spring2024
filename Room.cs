@@ -5,23 +5,33 @@ using UnityEngine;
 public class Room
 {
     private string name;
-    private List<string> theOpenDoors = new List<string>();
+
+    private Exit[] theExits = new Exit[4];
+    private int howManyExits = 0;
+    private Player currentPlayer;
 
     public Room(string name)
     {
         this.name = name;
+        this.currentPlayer = null;
     }
 
-    public void setOpenDoor(string direction)
+    public void addPlayer(Player thePlayer)
     {
-        this.theOpenDoors.Add(direction);
+        this.currentPlayer = thePlayer;
+        this.currentPlayer.setCurrentRoom(this);
     }
 
-    public bool isOpenDoor(string direction)
+    public void removePlayer()
     {
-        for(int i = 0; i < this.howManyOpenDoors; i++)
+        this.currentPlayer = null;
+    }
+
+    public bool hasExit(string direction)
+    {
+        for(int i = 0; i < this.howManyExits; i++)
         {
-            if(direction.Equals(this.theOpenDoors[i]))
+            if(this.theExits[i].getDirection().Equals(direction))
             {
                 return true;
             }
@@ -29,9 +39,13 @@ public class Room
         return false;
     }
 
-    public int getIndex(Room room)
+    public void addExit(string direction, Room destinationRoom)
     {
-        return MySingleton.getRoomIndex(room);
+        if(this.howManyExits < this.theExits.Length)
+        {
+            Exit e = new Exit(direction, destinationRoom);
+            this.theExits[this.howManyExits] = e;
+            this.howManyExits++;
+        }
     }
-
 }

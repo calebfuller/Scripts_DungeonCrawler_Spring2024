@@ -91,11 +91,10 @@ public class PlayertoScene : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print(other.tag);
         if(other.CompareTag("door"))
         {
-            print("Loading scene");
-
+            MySingleton.thePlayer.getCurrentRoom().removePlayer();
+            MySingleton.previousRoom = MySingleton.thePlayer.getCurrentRoom();
             EditorSceneManager.LoadScene("DungeonRoom");
         }
         else if(other.CompareTag("middleOfTheRoom") && !MySingleton.currentDirection.Equals("?"))
@@ -116,7 +115,7 @@ public class PlayertoScene : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.UpArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("north"))
+        if (Input.GetKeyUp(KeyCode.UpArrow) && !this.amMoving && MySingleton.thePlayer.getCurrentRoom().hasExit("north"))
         {
             this.amMoving = true;
             this.turnOnExits();
@@ -124,7 +123,7 @@ public class PlayertoScene : MonoBehaviour
             this.gameObject.transform.LookAt(this.northExit.transform.position);
         }
 
-        if (Input.GetKeyUp(KeyCode.DownArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("south"))
+        if (Input.GetKeyUp(KeyCode.DownArrow) && !this.amMoving && MySingleton.getCurrentRoom().hasExit("south"))
         {
             this.amMoving = true;
             this.turnOnExits();
@@ -132,7 +131,7 @@ public class PlayertoScene : MonoBehaviour
             this.gameObject.transform.LookAt(this.southExit.transform.position);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("west"))
+        if (Input.GetKeyUp(KeyCode.LeftArrow) && !this.amMoving && MySingleton.getCurrentRoom().hasExit("west"))
         {
             this.amMoving = true;
             this.turnOnExits();
@@ -140,7 +139,7 @@ public class PlayertoScene : MonoBehaviour
             this.gameObject.transform.LookAt(this.westExit.transform.position);
         }
 
-        if (Input.GetKeyUp(KeyCode.RightArrow) && !this.amMoving && MySingleton.theCurrentRoom.isOpenDoor("east"))
+        if (Input.GetKeyUp(KeyCode.RightArrow) && !this.amMoving && MySingleton.getCurrentRoom().hasExit("east"))
         {
             this.amMoving = true;
             this.turnOnExits();

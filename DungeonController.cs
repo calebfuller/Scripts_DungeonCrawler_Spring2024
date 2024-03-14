@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DungeonController : MonoBehaviour
 {
-    public GameObject[] closedDoors;
+    public GameObject northDoor, southDoor, eastDoor, westDoor;
 
     private string mapIndexToStringForExit(int index)
     {
@@ -31,38 +31,25 @@ public class DungeonController : MonoBehaviour
     }
     void Start()
     {
-        if(MySingleton.theCurrentRoom == null)
+        Room theCurrentRoom = MySingleton.thePlayer.getCurrentRoom();
+        if(theCurrentRoom.hasExit("north"))
         {
-            MySingleton.theCurrentRoom = new Room("a room");
-            MySingleton.addRoom(MySingleton.theCurrentRoom);
-        }
-        else
-        {
-            MySingleton.theCurrentRoom = MySingleton.previousRoom;
+            this.northDoor.SetActive(false);
         }
 
-        int openDoorIndex = Random.Range(0, 4);
-        this.closedDoors[openDoorIndex].SetActive(false);
-        MySingleton.theCurrentRoom.setOpenDoor(this.mapIndexToStringForExit(openDoorIndex));
-
-        for(int i = 0; i < 4; i++)
+        if (theCurrentRoom.hasExit("south"))
         {
-            if(openDoorIndex != i)
-            {
-                int coinFlip = Random.Range(0, 2);
-                if(coinFlip == 1)
-                {
-                    this.closedDoors[i].SetActive(false);
-                    MySingleton.theCurrentRoom.setOpenDoor(this.mapIndexToStringForExit(i));
-
-                }
-            }
+            this.southDoor.SetActive(false);
         }
-        if(MySingleton.previousRoom != null)
+
+        if (theCurrentRoom.hasExit("east"))
         {
-            int previousIndex = MySingleton.previousRoom.getIndex(MySingleton.theCurrentRoom);
-            int oppositeDoorIndex = (previousIndex + 2) % 4;
-            MySingleton.theCurrentRoom.setOpenDoor(mapIndexToStringForExit(oppositeDoorIndex));
+            this.eastDoor.SetActive(false);
+        }
+
+        if (theCurrentRoom.hasExit("west"))
+        {
+            this.westDoor.SetActive(false);
         }
        
     }
