@@ -51,7 +51,7 @@ public class Room
 
     public void placePowerPellets()
     {
-        for(Exit exit in theExits)
+        foreach(Exit exit in theExits)
         {
             if(exit != null)
             {
@@ -62,7 +62,7 @@ public class Room
 
     public void removeCollectedPellets()
     {
-        for (GameObject pellet in powerPellets)
+        foreach(GameObject pellet in powerPellets)
         {
             powerPellets.Clear();
         }
