@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.SceneManagement;
 
-public class PlayertoScene : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
+    public string fightScene = "FightScene";
+    public GameObject monster;
     public GameObject northExit;
     public GameObject southExit;
     public GameObject eastExit;
@@ -105,18 +107,28 @@ public class PlayertoScene : MonoBehaviour
         {
             print("Loading scene");
 
+            //remove the player from the current room and place him into the destination, prior to loading the new scene
             MySingleton.thePlayer.getCurrentRoom().removePlayer(MySingleton.currentDirection);
 
             EditorSceneManager.LoadScene("DungeonRoom");
         }
         else if(other.CompareTag("power-pellet"))
         {
-            MySingleton.totalPelletsCollected++;
-            pelletCountText.text = "Pellets Collected: " + MySingleton.totalPelletsCollected;
-            other.gameObject.SetActive(false);
+            other.gameObject.SetActive(false); //visually make pellet disappear
+
+            //programatically  make sure the pellet doesnt show up again
+            Room theCurrentRoom = MySingleton.thePlayer.getCurrentRoom();
+            theCurrentRoom.removePellet(other.GetComponent<pelletController>().direction) //this is our code to fix the pellet...add ; to end of this line for error to go away
+
+           
+
+
         }
         else if(other.CompareTag("middleOfTheRoom") && !MySingleton.currentDirection.Equals("?"))
         {
+            //we have hit the middle of the room, so lets turn off the collider
+            //until the next run of the scene to avoid additional collisions
+
             this.middleOfTheRoom.SetActive(false);
             this.turnOnExits();
 
@@ -131,6 +143,13 @@ public class PlayertoScene : MonoBehaviour
         }
     }
 
+        private void TriggerFightScene
+        {
+            GameObject monster = Instantiate(monsterPrefab, Vector3.zero, Quaternion.identity);
+            SceneManager.LoadScene(fightSceneName);
+        }
+
+    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.UpArrow) && !this.amMoving && MySingleton.thePlayer.getCurrentRoom().hasExit("north"))
@@ -166,6 +185,7 @@ public class PlayertoScene : MonoBehaviour
 
         }
 
+        //make the player move in the current direction
         if (MySingleton.currentDirection.Equals("north"))
         {
             this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, this.northExit.transform.position, this.speed * Time.deltaTime);
