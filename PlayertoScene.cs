@@ -5,8 +5,6 @@ using UnityEditor.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public string fightScene = "FightScene";
-    public GameObject monster;
     public GameObject northExit;
     public GameObject southExit;
     public GameObject eastExit;
@@ -114,11 +112,13 @@ public class PlayerController : MonoBehaviour
         }
         else if(other.CompareTag("power-pellet"))
         {
+            EditorSceneManager.LoadScene("FightScene");
+
             other.gameObject.SetActive(false); //visually make pellet disappear
 
             //programatically  make sure the pellet doesnt show up again
             Room theCurrentRoom = MySingleton.thePlayer.getCurrentRoom();
-            theCurrentRoom.removePellet(other.GetComponent<pelletController>().direction) //this is our code to fix the pellet...add ; to end of this line for error to go away
+            theCurrentRoom.removePellet(other.GetComponent<pelletController>().direction); //this is our code to fix the pellet...add ; to end of this line for error to go away
 
            
 
@@ -142,12 +142,6 @@ public class PlayerController : MonoBehaviour
             print("spomethilskdfjskldjfsdjkl");
         }
     }
-
-        private void TriggerFightScene
-        {
-            GameObject monster = Instantiate(monsterPrefab, Vector3.zero, Quaternion.identity);
-            SceneManager.LoadScene(fightSceneName);
-        }
 
     // Update is called once per frame
     void Update()
