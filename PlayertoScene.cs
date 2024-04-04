@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.SceneManagement;
 
-public class PlayerController : MonoBehaviour
+public class PlayertoScene : MonoBehaviour
 {
+   {
     public GameObject northExit;
     public GameObject southExit;
     public GameObject eastExit;

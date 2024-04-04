@@ -50,4 +50,4 @@ public class DeathMatch
             this.currentAttackerFIGHT = this.guy1FIGHT;
         }
     }
-}
+};
