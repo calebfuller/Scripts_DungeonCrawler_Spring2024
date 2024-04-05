@@ -64,7 +64,6 @@ public class fightController : MonoBehaviour
                 this.tryAttack(MySingleton.thePlayer, this.theMonster);
                 this.monster_hp_TMP.text = "Current HP: " + this.theMonster.getHP() + " AC: " + this.theMonster.getAC();
 
-                //now the defender may have fewer hp...check if their are dead?
                 if (this.theMonster.getHP() <= 0)
                 {
                     print(MySingleton.thePlayer + " has defeated " + this.theMonster.getname + "!!!!");
