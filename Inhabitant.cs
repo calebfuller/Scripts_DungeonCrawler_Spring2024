@@ -6,30 +6,39 @@ public abstract class Inhabitant
 {
     protected string name;
     protected Room currentRoom;
-
+    protected int hp, ac, maxHP;
+   
     public Inhabitant(string name)
     {
         this.name = name;
         this.currentRoom = null;
-        Random r = new Random();
-        this.hp = r.Next(10,15);
-        this.damage = r.Next(1,5);
+        this.hp = Random.Range(10, 16);
+        this.maxHP = this.hp;
+        this.ac = Random.Range(8, 17);
     }
 
-    public string getData()
+    public Room getCurrentRoom()
     {
-        string s = this.name;
-        s = s + " - " + this.hp;
-        return s;
+        return this.currentRoom;
     }
 
-    public int getDamage()
+    public void setCurrentRoom(Room r)
     {
-        return this.damage;
+        this.currentRoom = r;
     }
 
     public void takeDamage(int damage)
     {
         this.hp = this.hp - damage;
+    }
+
+    public int getHP()
+    {
+        return this.hp;
+    }
+
+    public int getAC()
+    {
+        return this.ac;
     }
 }

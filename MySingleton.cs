@@ -4,10 +4,35 @@ using UnityEngine;
 
 public class MySingleton
 {
-    public static int totalPelletsCollected = 0;
+    public static int currentPellets = 0;
     public static string currentDirection = "?";
     public static Player thePlayer;
     public static Dungeon theDungeon = MySingleton.generateDungeon();
+
+    public static string flipDirection(string direction)
+    {
+        if(direction.Equals("north"))
+        {
+            return "south";
+        }
+        else if (direction.Equals("south"))
+        {
+            return "north";
+        }
+        else if (direction.Equals("east"))
+        {
+            return "west";
+        }
+        else if (direction.Equals("west"))
+        {
+            return "east";
+        }
+        else
+        {
+            Debug.Log(direction + " is not a legal direction in flipDirection inside of MySingleton");
+            return "N/A";
+        }
+    }
 
     private static Dungeon generateDungeon()
     {
@@ -31,7 +56,7 @@ public class MySingleton
 
         Dungeon theDungeon = new Dungeon("the cross");
         theDungeon.setStartRoom(r1);
-        MySingleton.thePlayer = new Player("Caleb");
+        MySingleton.thePlayer = new Player("Mike");
         theDungeon.addPlayer(MySingleton.thePlayer);
         return theDungeon;
     }  
